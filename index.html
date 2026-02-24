@@ -228,8 +228,9 @@ async function doLogin() {
 }
 
 async function checkAdmin(user) {
-  const { data: profile } = await sb.from('profiles').select('is_admin').eq('id', user.id).single();
-  if (!profile || !profile.is_admin) {
+  // Use RPC function to bypass RLS
+  const { data: isAdmin, error } = await sb.rpc('is_admin', { check_user_id: user.id });
+  if (error || !isAdmin) {
     document.getElementById('login-error').textContent = 'ACCESS DENIED: NOT AN ADMIN';
     await sb.auth.signOut();
     return;
