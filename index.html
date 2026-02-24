@@ -238,7 +238,10 @@ async function checkAdmin(user) {
   showApp(user);
 }
 
+let appLoaded = false;
 function showApp(user) {
+  if (appLoaded) return;
+  appLoaded = true;
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
   document.getElementById('user-email').textContent = user.email;
